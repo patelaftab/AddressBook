@@ -8,35 +8,48 @@ namespace AddressBookPro_
 {
     public class ContactList
     {
-        Person person = new Person();
-        List<Person> people = new List<Person>();
         public void WelcomeMessage()    //Welcome Message
         {
             Console.WriteLine("Welcome to Address Book Program!\n");
         }
+        Person personObj = new Person();
+        List<Person> listPersonObj = new List<Person>();
+        Dictionary<string, List<Person>> personMapping = new Dictionary<string, List<Person>>();
         public void AddPerson()     //Adding Person .
         {
-            person = new Person();
+            personObj = new Person();
             Console.WriteLine("Enter your First Name");
-            person.firstName = Console.ReadLine();
+        tryingWithDifferentName:
+            personObj.firstName = Console.ReadLine();
+            foreach (KeyValuePair<string, List<Person>> kvp in personMapping)        //UC6-Won't allow duplicate first name to be stored in AddressBook .
+            {
+                if (kvp.Key.Equals(personObj.firstName))
+                {
+                    Console.WriteLine("The Name which your are trying to save is already in use,So in order to avoid confusion you've to try with some different name.");
+                    Console.WriteLine("Please try again :");
+                    goto tryingWithDifferentName;
+                }
+            }
             Console.WriteLine("Enter your Last Name");
-            person.lastName = Console.ReadLine();
+            personObj.lastName = Console.ReadLine();
             Console.WriteLine("Enter your Address");
-            person.address = Console.ReadLine();
+            personObj.address = Console.ReadLine();
             Console.WriteLine("Enter your Phone Number");
-            person.phoneNo = Convert.ToDouble(Console.ReadLine());
+            personObj.phoneNo = Convert.ToDouble(Console.ReadLine());
             Console.WriteLine("Enter your email id");
-            person.emailId = Console.ReadLine();
-            people.Add(person);
+            personObj.emailId = Console.ReadLine();
+
+            listPersonObj.Add(personObj);
+            personMapping.Add(personObj.firstName, listPersonObj);
         }
         public void EditPerson()    //Editing Contact .
         {
-        findingPersonAgain:
-            Console.WriteLine("Enter the first name of person to be removed");
+        updateDetails:
+            Console.WriteLine("Enter the first name of personObj to be removed");
             string verifyingFirstName = Console.ReadLine();
-            Console.WriteLine("Enter the last name of person to be removed");
+            Console.WriteLine("Enter the last name of personObj to be removed");
             string verifyingLastName = Console.ReadLine();
-            foreach (var person in people)
+            foreach (var person in listPersonObj)
             {
                 if (person.firstName.Equals(verifyingFirstName) && person.lastName.Equals(verifyingLastName))   //Editing Contact if exists.
                 {
@@ -71,7 +84,7 @@ namespace AddressBookPro_
                             Console.WriteLine("Do you want to try again ");
                             if (Console.ReadKey().Key == ConsoleKey.Y)
                             {
-                                goto findingPersonAgain;
+                                goto updateDetails;
                             }
                             break;
                     }
@@ -87,10 +100,10 @@ namespace AddressBookPro_
                 }
                 else
                 {
-                    Console.WriteLine("That person could not be found.Do you want to try again ");
+                    Console.WriteLine("That person name could not be found.Do you want to try again ");
                     if (Console.ReadKey().Key == ConsoleKey.Y)
                     {
-                        goto findingPersonAgain;
+                        goto updateDetails;
                     }
                     return;
                 }
@@ -98,14 +111,14 @@ namespace AddressBookPro_
         }
         public void ListPeople()        //List of all Contacts/People's.
         {
-            if (people.Count == 0)
+            if (listPersonObj.Count == 0)
             {
                 Console.WriteLine("Your Address book is empty. Press any key to continue");
                 Console.ReadKey();
                 return;
             }
-            Console.WriteLine("Here are the current people found in your address book :");
-            foreach (var person in people)
+            Console.WriteLine("Here are the current listPersonObj found in your address book :");
+            foreach (var person in listPersonObj)
             {
                 Console.WriteLine($"\n First Name : {person.firstName}\n Last Name : {person.lastName}\n Address : {person.address}\n Phone Number : {person.phoneNo}\n Email ID : {person.emailId}");
             }
@@ -114,18 +127,18 @@ namespace AddressBookPro_
         }
         public void RemovePerson()      //Delete an existing Contact 
         {
-            Console.WriteLine("Enter the first name of person to be removed");
+            Console.WriteLine("Enter the first name of personObj to be removed");
             string verifyingFirstName = Console.ReadLine();
-            Console.WriteLine("Enter the last name of person to be removed");
+            Console.WriteLine("Enter the last name of personObj to be removed");
             string verifyingLastName = Console.ReadLine();
-            foreach (var person in people)
+            foreach (var person in listPersonObj)
             {
                 if (person.firstName.Equals(verifyingFirstName) && person.lastName.Equals(verifyingLastName))
                 {
-                    Console.WriteLine("Are you sure you want to remove this person from your address book ? (Y/N)");
+                    Console.WriteLine("Are you sure you want to remove this personObj from your address book ? (Y/N)");
                     if (Console.ReadKey().Key == ConsoleKey.Y)
                     {
-                        people.Remove(person);
+                        listPersonObj.Remove(person);
                         Console.WriteLine("Person removed .Press any key to continue.\n");
                         return;
                     }
@@ -136,7 +149,7 @@ namespace AddressBookPro_
                 }
                 else
                 {
-                    Console.WriteLine("That person could not be found.Press any key to continue to try again ");
+                    Console.WriteLine("That personObj could not be found.Press any key to continue to try again ");
                     Console.ReadKey();
                     return;
                 }
