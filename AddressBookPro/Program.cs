@@ -1,29 +1,31 @@
-﻿namespace AddressBook
+﻿using AddressBookPro_;
+
+namespace AddressBook
 {
     internal class AddressBook
     {
-        public static void WelcomeMessage()
+        static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Address Book Program!\n");
-        }
-        public static void CreatingContact()
-        {
-            Console.WriteLine("Enter your First Name");
-            string firstName = Console.ReadLine();
-            Console.WriteLine("Enter your Last Name");
-            string lastName = Console.ReadLine();
-            Console.WriteLine("Enter your Address");
-            string address = Console.ReadLine();
-            Console.WriteLine("Enter your Phone_Number");
-            double phoneNo = Convert.ToDouble(Console.ReadLine());
-            Console.WriteLine("Enter your Email_Id");
-            string emailId = Console.ReadLine();
-            Console.WriteLine($"\n First Name : {firstName}\n Last Name : {lastName}\n Address : {address}\n Phone Number : {phoneNo}\n Email ID : {emailId}");
-        }
-        public static void Main(string[] args)
-        {
-            WelcomeMessage();
-            CreatingContact();
+            ContactList contact = new ContactList();
+            contact.WelcomeMessage();
+        ReEnteringApp:
+            Console.WriteLine("Select any one from below options \n" +
+                "Press 1 : to Create/Add a new contact\n" +
+                "Press 2 : to view all the contacts in Address book.");
+            int option = Convert.ToInt32(Console.ReadLine());
+            switch (option)
+            {
+                case 1:
+                    contact.AddPerson();
+                    break;
+                case 2:
+                    contact.ListPeople();
+                    break;
+                default:
+                    Console.WriteLine("Invalid Option selected , Please try again ");
+                    break;
+            }
+            goto ReEnteringApp;
         }
     }
 }
